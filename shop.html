@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Shop | Music Arts Productions</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="images/MAP logo.jpeg" type="image/jpeg">
+        <script src="https://js.stripe.com/v3/"></script>
+    </head>
+    
+<body>
+    <header>
+        <div class="nav-container">
+            <img src="images/MAP logo.jpeg" alt="Music Arts Productions Logo" class="logo">
+            <h1 class="site-title">MUSIC ARTS PRODUCTIONS</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="beats.html">Beats</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="shop.html" class="active">Shop</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="shop">
+        <h2>Browse Our Beats</h2>
+        <p>Exclusive beats for purchase and licensing. Find the perfect sound for your project.</p>
+        
+        <div class="beat-grid">
+            <div class="album-card">
+                <img src="beats for sale/andrew/album cover/andrew.jpeg" alt="Album 1 Cover">
+                <h3>ANDREW</h3>
+                <div class="audio-list">
+                    <div class="audio-item">
+                        <h4>AUDIO 1</h4>
+                        <audio controls>
+                            <source src="beats for sale/andrew/MAP 263.mp3" type="audio/mp3">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p>$50.00</p>
+                        <a href="#" class="btn buy-btn" data-beat="andrew-263" data-price="50">Buy Now</a>
+                    </div>
+                    <div class="audio-item">
+                        <h4>AUDIO 2</h4>
+                        <audio controls>
+                            <source src="beats for sale/andrew/MAP 264.mp3" type="audio/mp3">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p>$50.00</p>
+                        <a href="#" class="btn buy-btn" data-beat="andrew-264" data-price="50">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="album-card">
+                <img src="beats for sale/aote 2/album cover/AOTE 2.jpeg" alt="Album 2 Cover">
+                <h3>AOTE 2</h3>
+                <div class="audio-list">
+                    <div class="audio-item">
+                        <h4>AOTE 2 AUDIO 1</h4>
+                        <audio controls>
+                            <source src="beats for sale/aote 2/MAP 150.mp3" type="audio/mp3">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p>$50.00</p>
+                        <a href="#" class="btn buy-btn" data-beat="aote2-150" data-price="50">Buy Now</a>
+                    </div>
+                    <div class="audio-item">
+                        <h4>AOTE 2 AUDIO 2</h4>
+                        <audio controls>
+                            <source src="beats for sale/track2.mp3" type="audio/mp3">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <p>$50.00</p>
+                        <a href="#" class="btn buy-btn" data-beat="aote2-2" data-price="50">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Music Arts Productions. All rights reserved.</p>
+    </footer>
+
+    <script>
+        var stripe = Stripe("your_publishable_key_here");
+
+        document.querySelectorAll(".buy-btn").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                const beatId = this.getAttribute("data-beat");
+                const price = this.getAttribute("data-price");
+
+                fetch("/create-checkout-session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ beatId, price })
+                })
+                .then(response => response.json())
+                .then(session => {
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+    </script>
+</body>
+</html>
+
